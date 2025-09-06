@@ -54,3 +54,77 @@ O objetivo é criar um site profissional e moderno para a Insygro, que sirva com
 |-- servico-agronomia.html    # NOVA PÁGINA
 |-- PROJETO_SITE.md
 ```
+
+---
+
+## Como Atualizar o Site no GitHub Pages
+
+Para atualizar o site após fazer modificações locais, siga estes 3 passos no terminal do VS Code:
+
+1.  **Adicionar todas as alterações para serem salvas:**
+    ```powershell
+    git add .
+    ```
+
+2.  **Criar um "pacote" de atualização (commit) com uma mensagem automática:**
+    ```powershell
+    git commit -m "Atualização do site em $(Get-Date -Format 'dd-MM-yyyy HH:mm:ss')"
+    ```
+
+3.  **Enviar as alterações para o GitHub para publicar:**
+    ```powershell
+    git push
+    ```
+
+Após o `push`, o GitHub Pages irá atualizar o site automaticamente em 1 ou 2 minutos.
+
+---
+
+## Princípios Técnicos e Boas Práticas
+
+Para garantir a consistência e evitar erros comuns durante o desenvolvimento, os seguintes princípios devem ser seguidos:
+
+### 1. Template Padrão para Novas Páginas HTML
+
+Toda nova página `.html` criada para este projeto **DEVE** seguir a estrutura mínima abaixo. Isso garante que todas as funcionalidades essenciais (estilos, animações, SEO) estejam presentes desde o início.
+
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ATENÇÃO: Mudar a descrição para ser específica da página -->
+    <meta name="description" content="Descrição específica da página aqui.">
+    <!-- ATENÇÃO: Mudar o título para ser específico da página -->
+    <title>Título da Página - Insygro</title>
+    <link rel="icon" href="Image/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <!-- Conteúdo do Header (geralmente copiado de outra página) -->
+    </header>
+
+    <main>
+        <!-- Conteúdo principal da página -->
+    </main>
+
+    <footer>
+        <!-- Conteúdo do Footer (geralmente copiado de outra página) -->
+    </footer>
+
+    <!-- SCRIPTS ESSENCIAIS - DEVEM ESTAR EM TODAS AS PÁGINAS -->
+    <script src="js/script.js"></script>
+    <script src="js/animations.js"></script>
+</body>
+</html>
+```
+
+### 2. Convenção de Nomenclatura CSS
+
+Para evitar que estilos de uma página afetem outra inesperadamente (como o problema dos links de serviço):
+- **Estilos Gerais:** Classes que se aplicam a todo o site (ex: `.container`, `.cta-button`) podem ter nomes genéricos.
+- **Estilos Específicos:** Se um estilo é exclusivo para um componente de uma página específica, use um nome que reflita isso.
+    - **Exemplo Ruim:** `.card-link` (muito genérico).
+    - **Exemplo Bom:** `.home-service-card-link` ou `.service-page-details-link`. Isso deixa claro onde o estilo deve ser aplicado.
