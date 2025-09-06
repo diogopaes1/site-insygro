@@ -41,21 +41,47 @@
 
         <section class="contact-form-section">
             <div class="container">
-                <form id="contact-form" action="https://api.staticforms.xyz/submit" method="post">
-                    <input type="hidden" name="accessKey" value="70884138-b531-4595-923f-4275f99900a6">
-                    <input type="hidden" name="redirectTo" value="https://diogopaes1.github.io/site-insygro/contato.html">
+                <form id="contact-form" action="https://formspree.io/f/myzdbryd" method="post">
                     
+                    <!-- O Formspree usa _next para redirecionar após o envio. Apontei para uma futura página de "obrigado". -->
+                    <input type="hidden" name="_next" value="https://insygro.com.br/obrigado.html"> 
+                    
+                    <div class="form-group">
+                        <label>Objetivo do Contato:</label>
+                        <div class="radio-group">
+                            <input type="radio" id="objetivo-duvida" name="objetivo" value="Dúvida" checked>
+                            <label for="objetivo-duvida">Dúvidas</label>
+                            <input type="radio" id="objetivo-orcamento" name="objetivo" value="Orçamento">
+                            <label for="objetivo-orcamento">Orçamento</label>
+                        </div>
+                    </div>
+
+                    <!-- Campos que aparecem apenas para Orçamento -->
+                    <div id="orcamento-fields" class="hidden">
+                        <div class="form-group">
+                            <label for="servico">Selecione o Serviço de Interesse:</label>
+                            <select id="servico" name="servico_interesse">
+                                <option value="Análise de Dados e Consultoria Estatística">Análise de Dados e Consultoria Estatística</option>
+                                <option value="Bioinformática e Análise Metagenômica">Bioinformática e Análise Metagenômica</option>
+                                <option value="Consultoria Agronômica Avançada">Consultoria Agronômica Avançada</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <label for="name">Nome</label>
                     <input type="text" id="name" name="name" required>
 
                     <label for="email">E-mail</label>
                     <input type="email" id="email" name="email" required>
 
-                    <label for="subject">Assunto</label>
-                    <input type="text" id="subject" name="$subject" required>
+                    <!-- O campo "Assunto" foi removido -->
 
                     <label for="message">Mensagem</label>
                     <textarea id="message" name="message" rows="6" required></textarea>
+
+                    <!-- Campo oculto para definir o assunto do e-mail automaticamente -->
+                    <input type="hidden" id="form-subject" name="_subject" value="Contato do Site: Dúvida">
 
                     <div class="g-recaptcha" data-sitekey="6Lfs278rAAAAAKsk4xHU7TYyQFJXY7P2N7MvKNEV"></div>
 
@@ -65,6 +91,15 @@
         </section>
     </main>
 
+    <!-- HTML para o Modal de Sucesso/Erro -->
+    <div id="status-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 id="modal-title"></h3>
+            <p id="modal-message"></p>
+            <button id="close-modal-btn" class="cta-button">Fechar</button>
+        </div>
+    </div>
+
     <footer>
         <div class="container">
             <p>&copy; 2025 Insygro Ciência e Tecnologia. Todos os direitos reservados.</p>
@@ -72,6 +107,7 @@
         </div>
     </footer>
 
+    <!-- Re-adicionando o script do reCAPTCHA -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="js/script.js"></script>
     <script src="js/animations.js"></script>
