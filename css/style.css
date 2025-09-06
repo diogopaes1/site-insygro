@@ -12,18 +12,17 @@
 
 /* --- Estilos Globais --- */
 body {
-    font-family: var(--font-sans-serif);
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
     margin: 0;
-    padding: 0;
-    background-color: var(--white);
-    color: var(--dark-text);
-    line-height: 1.7;
-    font-size: 16px;
+    color: #333;
+    background-color: #f9f9f9;
+    overflow-y: scroll; /* Força a barra de rolagem a estar sempre visível, evitando "saltos" no layout */
 }
 
 .container {
+    max-width: 1100px;
     width: 90%;
-    max-width: 1140px;
     margin: 0 auto;
 }
 
@@ -73,6 +72,11 @@ nav a {
 nav a:hover, nav a.active {
     color: var(--primary-green);
     border-bottom-color: var(--primary-green);
+}
+
+/* Esconde o ícone do menu no desktop por padrão */
+.burger {
+    display: none;
 }
 
 /* --- Seção Hero (Página Inicial) --- */
@@ -386,7 +390,7 @@ section.visible {
     }
 
     .burger {
-        display: block;
+        display: block; /* Mostra o ícone hambúrguer no celular */
         cursor: pointer;
     }
 
@@ -415,6 +419,12 @@ section.visible {
         transform: rotate(45deg) translate(-5px, -6px);
     }
 
+    /* Ajusta o layout de seções para coluna no mobile */
+    .service-cards-container .container, .stats-container {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
     nav a {
         color: var(--white); /* Links em branco no menu aberto */
     }
@@ -431,4 +441,9 @@ section.visible {
         margin: 5px;
         transition: all 0.3s ease;
     }
+}
+
+/* Classe para travar o scroll do body quando o menu mobile está aberto */
+.no-scroll {
+    overflow: hidden;
 }

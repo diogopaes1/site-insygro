@@ -76,54 +76,30 @@ Para publicar ou atualizar o site no domínio `insygro.com.br`, siga estes passo
 ### 3. Configurações Pós-Publicação (Crítico)
 - **Google reCAPTCHA:** Lembre-se de que o domínio `insygro.com.br` e `www.insygro.com.br` devem estar autorizados no painel do Google reCAPTCHA para que o formulário de contato funcione.
 
-
 ---
 
-## Princípios Técnicos e Boas Práticas
+## Checklist de Manutenção e Atualização
 
-Para garantir a consistência e evitar erros comuns durante o desenvolvimento, os seguintes princípios devem ser seguidos:
+Antes de fazer o upload de uma nova versão do site para a Hostinger, siga este checklist para evitar a reintrodução de bugs antigos:
 
-### 1. Template Padrão para Novas Páginas HTML
+-   **[ ] 1. Consistência do Cabeçalho:**
+    -   Se você modificou o menu de navegação, você copiou e colou o `<header>...</header>` completo e idêntico para **TODAS** as páginas `.html`? (A única diferença permitida é a classe `.active` no link da página atual).
 
-Toda nova página `.html` criada para este projeto **DEVE** seguir a estrutura mínima abaixo. Isso garante que todas as funcionalidades essenciais (estilos, animações, SEO) estejam presentes desde o início.
+-   **[ ] 2. Scripts Essenciais:**
+    -   Todas as páginas `.html` (incluindo novas páginas) possuem os dois scripts no final do `<body>`?
+        ```html
+        <script src="js/script.js"></script>
+        <script src="js/animations.js"></script>
+        ```
 
-```html
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- ATENÇÃO: Mudar a descrição para ser específica da página -->
-    <meta name="description" content="Descrição específica da página aqui.">
-    <!-- ATENÇÃO: Mudar o título para ser específico da página -->
-    <title>Título da Página - Insygro</title>
-    <link rel="icon" href="Image/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <header>
-        <!-- Conteúdo do Header (geralmente copiado de outra página) -->
-    </header>
+-   **[ ] 3. Teste de Responsividade:**
+    -   Você diminuiu a janela do navegador no seu computador para verificar se o menu hambúrguer aparece e funciona corretamente?
+    -   As seções da página se ajustam para o formato de coluna sem quebrar o layout?
 
-    <main>
-        <!-- Conteúdo principal da página -->
-    </main>
+-   **[ ] 4. Formulário de Contato:**
+    -   Se o site for ser testado em um novo domínio/endereço, você adicionou este novo domínio à lista de permissões no painel do Google reCAPTCHA?
 
-    <footer>
-        <!-- Conteúdo do Footer (geralmente copiado de outra página) -->
-    </footer>
+-   **[ ] 5. Compactação Correta:**
+    -   Ao criar o arquivo `.zip`, você selecionou os arquivos *dentro* da pasta do projeto e **NÃO** incluiu a pasta `.git`?
 
-    <!-- SCRIPTS ESSENCIAIS - DEVEM ESTAR EM TODAS AS PÁGINAS -->
-    <script src="js/script.js"></script>
-    <script src="js/animations.js"></script>
-</body>
-</html>
-```
-
-### 2. Convenção de Nomenclatura CSS
-
-Para evitar que estilos de uma página afetem outra inesperadamente (como o problema dos links de serviço):
-- **Estilos Gerais:** Classes que se aplicam a todo o site (ex: `.container`, `.cta-button`) podem ter nomes genéricos.
-- **Estilos Específicos:** Se um estilo é exclusivo para um componente de uma página específica, use um nome que reflita isso.
-    - **Exemplo Ruim:** `.card-link` (muito genérico).
-    - **Exemplo Bom:** `.home-service-card-link` ou `.service-page-details-link`. Isso deixa claro onde o estilo deve ser aplicado.
+Seguir este checklist garantirá que as atualizações futuras sejam tranquilas e sem surpresas.
