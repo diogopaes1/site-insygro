@@ -57,26 +57,25 @@ O objetivo é criar um site profissional e moderno para a Insygro, que sirva com
 
 ---
 
-## Como Atualizar o Site no GitHub Pages
+## Publicação e Atualização na Hostinger
 
-Para atualizar o site após fazer modificações locais, siga estes 3 passos no terminal do VS Code:
+Para publicar ou atualizar o site no domínio `insygro.com.br`, siga estes passos:
 
-1.  **Adicionar todas as alterações para serem salvas:**
-    ```powershell
-    git add .
-    ```
+### 1. Preparar os Arquivos
+1.  No seu computador, abra a pasta do projeto `Site_Insygro`.
+2.  Selecione **todos os arquivos e pastas** (HTML, CSS, JS, Image, etc.). **NÃO inclua a pasta `.git`**.
+3.  Clique com o botão direito nos arquivos selecionados e escolha **"Enviar para" > "Pasta compactada (zipada)"**.
+4.  Nomeie o arquivo como `site.zip`.
 
-2.  **Criar um "pacote" de atualização (commit) com uma mensagem automática:**
-    ```powershell
-    git commit -m "Atualização do site em $(Get-Date -Format 'dd-MM-yyyy HH:mm:ss')"
-    ```
+### 2. Enviar para a Hostinger
+1.  Acesse o painel da Hostinger e vá para **Gerenciador de Arquivos**.
+2.  Entre na pasta `public_html`. Se for uma atualização, exclua os arquivos antigos primeiro (após fazer um backup).
+3.  Use a função **"Upload"** para enviar o arquivo `site.zip`.
+4.  Clique com o botão direito no `site.zip` e selecione **"Extrair"** (Extract), confirmando a extração para a pasta `public_html`.
 
-3.  **Enviar as alterações para o GitHub para publicar:**
-    ```powershell
-    git push
-    ```
+### 3. Configurações Pós-Publicação (Crítico)
+- **Google reCAPTCHA:** Lembre-se de que o domínio `insygro.com.br` e `www.insygro.com.br` devem estar autorizados no painel do Google reCAPTCHA para que o formulário de contato funcione.
 
-Após o `push`, o GitHub Pages irá atualizar o site automaticamente em 1 ou 2 minutos.
 
 ---
 
