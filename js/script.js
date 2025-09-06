@@ -1,25 +1,72 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const formObjective = document.getElementById('formObjective');
-    const orcamentoFields = document.getElementById('orcamentoFields');
-    const contactForm = document.getElementById('contactForm');
+    
+    // --- Lógica para o Menu Hambúrguer ---
+    const burger = document.querySelector('.burger');
+    const nav = document.querySelector('.nav-links');
+    const body = document.querySelector('body');
 
-    function toggleOrcamentoFields() {
-        orcamentoFields.classList.toggle('hidden', formObjective.value !== 'orcamento');
+    if (burger && nav) {
+        burger.addEventListener('click', () => {
+            nav.classList.toggle('nav-active');
+            body.classList.toggle('no-scroll');
+            burger.classList.toggle('toggle');
+        });
     }
 
-    formObjective.addEventListener('change', toggleOrcamentoFields);
+    // --- Lógica para o Formulário de Contato ---
+    const form = document.getElementById('contact-form');
+    const objetivoDuvida = document.getElementById('objetivo-duvida');
+    const objetivoOrcamento = document.getElementById('objetivo-orcamento');
+    const orcamentoFields = document.getElementById('orcamento-fields');
+    const formSubject = document.getElementById('form-subject'); // Pega o novo campo oculto
 
+    // Elementos do Modal
+    const statusModal = document.getElementById('status-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalMessage = document.getElementById('modal-message');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+
+    // Função para mostrar/esconder campos de orçamento E definir o assunto
+    function toggleOrcamentoFields() {
+        if (objetivoOrcamento && objetivoOrcamento.checked) {
+            orcamentoFields.classList.remove('hidden');
+            if (formSubject) formSubject.value = "Contato do Site: Pedido de Orçamento"; // Define o assunto para Orçamento
+        } else if (orcamentoFields) {
+            orcamentoFields.classList.add('hidden');
+            if (formSubject) formSubject.value = "Contato do Site: Dúvida"; // Define o assunto para Dúvida
+        }
+    }
+
+    if (objetivoDuvida) objetivoDuvida.addEventListener('change', toggleOrcamentoFields);
+    if (objetivoOrcamento) objetivoOrcamento.addEventListener('change', toggleOrcamentoFields);
+    toggleOrcamentoFields(); // Verifica o estado inicial
+
+    // Função para mostrar o modal
+    function showModal(title, message) {
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
+        statusModal.classList.remove('hidden');
+    }
+
+    // Função para esconder o modal
+    function hideModal() {
+        statusModal.classList.add('hidden');
+    }
+
+    if (closeModalBtn) closeModalBtn.addEventListener('click', hideModal);
+    if (statusModal) statusModal.addEventListener('click', (event) => {
+        if (event.target === statusModal) { // Fecha se clicar no fundo
+            hideModal();
+        }
+    });
+
+    // Lógica de envio do formulário com AJAX
     async function handleSubmit(event) {
-        event.preventDefault();
-        const form = event.target;
-        const data = new FormData(form);
-
-        // Adiciona o assunto dinâmico aos dados do formulário
-        const objectiveText = formObjective.options[formObjective.selectedIndex].text;
-        data.append('_subject', `${objectiveText} - Contato Site Insygro`);
-
+        event.preventDefault(); // Impede o redirecionamento padrão
+        const data = new FormData(event.target);
+        
         try {
-            const response = await fetch(form.action, {
+            const response = await fetch(event.target.action, {
                 method: form.method,
                 body: data,
                 headers: {
@@ -28,53 +75,22 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             if (response.ok) {
-                alert('Mensagem enviada com sucesso! Agradecemos o seu contato.');
-                form.reset();
-                grecaptcha.reset();
-                toggleOrcamentoFields();
+                showModal("Sucesso!", "Sua mensagem foi enviada. Entraremos em contato em breve.");
+                form.reset(); // Limpa o formulário
+                toggleOrcamentoFields(); // Garante que os campos de orçamento voltem ao estado inicial
             } else {
                 const responseData = await response.json();
                 if (Object.hasOwn(responseData, 'errors')) {
-                    alert(responseData["errors"].map(error => error["message"]).join(", "));
+                    const errorMsg = responseData["errors"].map(error => error["message"]).join(", ");
+                    showModal("Erro no Envio", `Houve um problema: ${errorMsg}`);
                 } else {
-                    alert('Ocorreu um erro ao enviar a mensagem. Tente novamente.');
+                    showModal("Erro no Envio", "Não foi possível enviar sua mensagem. Tente novamente mais tarde.");
                 }
             }
         } catch (error) {
-            alert('Ocorreu um erro ao enviar a mensagem. Verifique sua conexão e tente novamente.');
+            showModal("Erro de Conexão", "Não foi possível conectar ao servidor. Verifique sua internet e tente novamente.");
         }
     }
 
-    contactForm.addEventListener('submit', handleSubmit);
-
-    toggleOrcamentoFields();
-
-    const navSlide = () => {
-        const burger = document.querySelector('.burger');
-        const nav = document.querySelector('.nav-links');
-        const navLinks = document.querySelectorAll('.nav-links li');
-        const body = document.querySelector('body');
-
-        if (burger) {
-            burger.addEventListener('click', () => {
-                // Toggle Nav
-                nav.classList.toggle('nav-active');
-                body.classList.toggle('no-scroll'); // Trava/Destrava o scroll
-
-                // Animate Links
-                navLinks.forEach((link, index) => {
-                    if (link.style.animation) {
-                        link.style.animation = '';
-                    } else {
-                        link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`;
-                    }
-                });
-
-                // Burger Animation
-                burger.classList.toggle('toggle');
-            });
-        }
-    }
-
-    navSlide();
+    if (form) form.addEventListener("submit", handleSubmit);
 });
