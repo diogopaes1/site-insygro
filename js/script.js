@@ -3,12 +3,27 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Lógica para o Menu Hambúrguer ---
     const burger = document.querySelector('.burger');
     const nav = document.querySelector('.nav-links');
+    const navLinks = document.querySelectorAll('.nav-links li');
     const body = document.querySelector('body');
 
     if (burger && nav) {
         burger.addEventListener('click', () => {
+            // Mostra/Esconde o menu
             nav.classList.toggle('nav-active');
+            
+            // Trava/Destrava a rolagem da página
             body.classList.toggle('no-scroll');
+
+            // Anima os links aparecendo
+            navLinks.forEach((link, index) => {
+                if (link.style.animation) {
+                    link.style.animation = '';
+                } else {
+                    link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`;
+                }
+            });
+
+            // Anima o ícone virando um "X"
             burger.classList.toggle('toggle');
         });
     }
@@ -18,8 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const objetivoDuvida = document.getElementById('objetivo-duvida');
     const objetivoOrcamento = document.getElementById('objetivo-orcamento');
     const orcamentoFields = document.getElementById('orcamento-fields');
-    const formSubject = document.getElementById('form-subject'); // Pega o novo campo oculto
-
+    const formSubject = document.getElementById('form-subject');
+    
     // Elementos do Modal
     const statusModal = document.getElementById('status-modal');
     const modalTitle = document.getElementById('modal-title');
@@ -39,25 +54,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (objetivoDuvida) objetivoDuvida.addEventListener('change', toggleOrcamentoFields);
     if (objetivoOrcamento) objetivoOrcamento.addEventListener('change', toggleOrcamentoFields);
-    toggleOrcamentoFields(); // Verifica o estado inicial
+    if (form) toggleOrcamentoFields(); // Verifica o estado inicial
 
     // Função para mostrar o modal
     function showModal(title, message) {
-        modalTitle.textContent = title;
-        modalMessage.textContent = message;
-        statusModal.classList.remove('hidden');
+        if(statusModal) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            statusModal.classList.remove('hidden');
+        }
     }
 
     // Função para esconder o modal
     function hideModal() {
-        statusModal.classList.add('hidden');
+        if(statusModal) statusModal.classList.add('hidden');
     }
 
     if (closeModalBtn) closeModalBtn.addEventListener('click', hideModal);
     if (statusModal) statusModal.addEventListener('click', (event) => {
-        if (event.target === statusModal) { // Fecha se clicar no fundo
-            hideModal();
-        }
+        if (event.target === statusModal) hideModal();
     });
 
     // Lógica de envio do formulário com AJAX
@@ -69,23 +84,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const response = await fetch(event.target.action, {
                 method: form.method,
                 body: data,
-                headers: {
-                    'Accept': 'application/json'
-                }
+                headers: { 'Accept': 'application/json' }
             });
 
             if (response.ok) {
                 showModal("Sucesso!", "Sua mensagem foi enviada. Entraremos em contato em breve.");
                 form.reset(); // Limpa o formulário
+                if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
                 toggleOrcamentoFields(); // Garante que os campos de orçamento voltem ao estado inicial
             } else {
                 const responseData = await response.json();
-                if (Object.hasOwn(responseData, 'errors')) {
-                    const errorMsg = responseData["errors"].map(error => error["message"]).join(", ");
-                    showModal("Erro no Envio", `Houve um problema: ${errorMsg}`);
-                } else {
-                    showModal("Erro no Envio", "Não foi possível enviar sua mensagem. Tente novamente mais tarde.");
-                }
+                const errorMsg = responseData.errors ? responseData.errors.map(e => e.message).join(", ") : "Tente novamente mais tarde.";
+                showModal("Erro no Envio", `Houve um problema: ${errorMsg}`);
             }
         } catch (error) {
             showModal("Erro de Conexão", "Não foi possível conectar ao servidor. Verifique sua internet e tente novamente.");

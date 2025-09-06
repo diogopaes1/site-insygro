@@ -278,9 +278,9 @@ nav a:hover, nav a.active {
 
 .testimonial-card cite {
     display: block;
-    margin-top: 20px;
+    margin-top: 1rem;
     font-weight: bold;
-    color: #555;
+    color: var(--primary-green);
 }
 
 /* --- Formulário de Contato --- */
@@ -397,82 +397,82 @@ section.visible {
     color: var(--dark-green);
 }
 
-/* --- Estilos para Menu Responsivo (Hamburguer) --- */
-@media screen and (max-width: 768px) {
-    body {
-        overflow-x: hidden; /* Previne scroll horizontal quando o menu está aberto */
-    }
+/* --- Estilos para o Menu Responsivo (Hamburguer) --- */
 
+/* Por padrão, o ícone do menu fica escondido em telas grandes */
+.burger {
+    display: none;
+    cursor: pointer;
+}
+
+.burger div {
+    width: 25px;
+    height: 3px;
+    background-color: var(--dark-text);
+    margin: 5px;
+    transition: all 0.3s ease;
+}
+
+/* Esta regra SÓ é aplicada em telas com largura máxima de 768px (celulares) */
+@media screen and (max-width: 768px) {
     .nav-links {
-        position: absolute;
+        position: fixed; /* Fica fixo na tela, sobre o conteúdo */
         right: 0px;
-        height: 92vh;
-        top: 8vh;
-        background-color: var(--primary-green);
+        height: 92vh; /* Ocupa quase toda a altura */
+        top: 8vh; /* Começa abaixo do cabeçalho */
+        background-color: #333; /* Um fundo escuro para o menu aberto */
         display: flex;
-        flex-direction: column;
+        flex-direction: column; /* Itens na vertical */
         align-items: center;
-        width: 50%;
-        transform: translateX(100%);
+        justify-content: flex-start; /* Alinha os itens no topo */
+        padding-top: 5vh; /* Adiciona um espaço no topo do menu */
+        gap: 2rem; /* Define o espaço vertical entre os links */
+        width: 40%;
+        transform: translateX(100%); /* Começa escondido fora da tela, à direita */
         transition: transform 0.5s ease-in;
+        z-index: 1000;
     }
 
     .nav-links li {
-        opacity: 0;
-    }
-
-    .burger {
-        display: block; /* Mostra o ícone hambúrguer no celular */
-        cursor: pointer;
-    }
-
-    .nav-active {
-        transform: translateX(0%);
-    }
-
-    @keyframes navLinkFade {
-        from {
-            opacity: 0;
-            transform: translateX(50px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0px);
-        }
-    }
-
-    .toggle .line1 {
-        transform: rotate(-45deg) translate(-5px, 6px);
-    }
-    .toggle .line2 {
-        opacity: 0;
-    }
-    .toggle .line3 {
-        transform: rotate(45deg) translate(-5px, -6px);
-    }
-
-    /* Ajusta o layout de seções para coluna no mobile */
-    .service-cards-container .container, .stats-container {
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    nav a {
-        color: var(--white); /* Links em branco no menu aberto */
+        opacity: 0; /* Links começam invisíveis para a animação */
     }
     
-    nav ul {
-        gap: 3rem;
-        padding-top: 2rem;
+    .nav-links a {
+        color: white; /* Texto branco para contrastar com o fundo escuro */
     }
 
-    .burger div {
-        width: 25px;
-        height: 3px;
-        background-color: var(--dark-text);
-        margin: 5px;
-        transition: all 0.3s ease;
+    /* Mostra o ícone do menu no celular */
+    .burger {
+        display: block;
     }
+}
+
+/* Classe que o JavaScript vai adicionar para mostrar o menu */
+.nav-active {
+    transform: translateX(0%); /* Move o menu para dentro da tela */
+}
+
+/* Animação para os links aparecerem um a um */
+@keyframes navLinkFade {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
+
+/* Animação para o ícone hambúrguer virar um "X" */
+.toggle .line1 {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+.toggle .line2 {
+    opacity: 0;
+}
+.toggle .line3 {
+    transform: rotate(45deg) translate(-5px, -6px);
 }
 
 /* Classe para travar o scroll do body quando o menu mobile está aberto */
