@@ -1,62 +1,101 @@
 document.addEventListener('DOMContentLoaded', function() {
     
-    // --- Lógica para o Menu Hambúrguer ---
+    // --- Constantes Globais ---
     const burger = document.querySelector('.burger');
     const nav = document.querySelector('.nav-links');
     const navLinks = document.querySelectorAll('.nav-links li');
     const body = document.querySelector('body');
 
-    if (burger && nav) {
-        burger.addEventListener('click', () => {
-            // Mostra/Esconde o menu
-            nav.classList.toggle('nav-active');
-            
-            // Trava/Destrava a rolagem da página
-            body.classList.toggle('no-scroll');
-
-            // Anima os links aparecendo
+    // --- Funções do Menu ---
+    // A função agora aceita um parâmetro para controlar a animação
+    function openNav(animate = false) {
+        if (!nav || !body || !burger) return;
+        nav.classList.add('nav-active');
+        body.classList.add('no-scroll');
+        burger.classList.add('toggle');
+        
+        // Só executa a animação se 'animate' for verdadeiro
+        if (animate) {
             navLinks.forEach((link, index) => {
-                if (link.style.animation) {
-                    link.style.animation = '';
-                } else {
-                    link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`;
-                }
+                link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`;
             });
+        }
+    }
 
-            // Anima o ícone virando um "X"
-            burger.classList.toggle('toggle');
+    function closeNav() {
+        if (!nav || !body || !burger) return;
+        nav.classList.remove('nav-active');
+        body.classList.remove('no-scroll');
+        burger.classList.remove('toggle');
+        // Reseta a animação para que possa ser executada da próxima vez
+        navLinks.forEach(link => {
+            link.style.animation = '';
         });
     }
 
-    // --- Lógica para o Formulário de Contato ---
+    // --- Lógica Principal do Menu ---
+    if (burger && nav) {
+        // 1. Abrir/Fechar ao clicar no ícone
+        burger.addEventListener('click', () => {
+            if (nav.classList.contains('nav-active')) {
+                closeNav();
+            } else {
+                // Chama openNav com animação
+                openNav(true); 
+            }
+        });
+
+        // 2. Fechar ao clicar fora do menu
+        document.addEventListener('click', function(event) {
+            const isNavActive = nav.classList.contains('nav-active');
+            const isClickOutside = !nav.contains(event.target) && !burger.contains(event.target);
+            if (isNavActive && isClickOutside) {
+                closeNav();
+            }
+        });
+
+        // 3. Sinalizar para manter o menu aberto na próxima página
+        navLinks.forEach(item => {
+            item.querySelector('a').addEventListener('click', function() {
+                if (nav.classList.contains('nav-active')) {
+                    sessionStorage.setItem('openMobileMenu', 'true');
+                }
+            });
+        });
+
+        // 4. Verificar o sinal ao carregar a página
+        if (sessionStorage.getItem('openMobileMenu') === 'true') {
+            // Chama openNav SEM animação
+            openNav(false); 
+            sessionStorage.removeItem('openMobileMenu');
+        }
+    }
+
+    // --- Lógica para o Formulário de Contato (permanece igual) ---
     const form = document.getElementById('contact-form');
     const objetivoDuvida = document.getElementById('objetivo-duvida');
     const objetivoOrcamento = document.getElementById('objetivo-orcamento');
     const orcamentoFields = document.getElementById('orcamento-fields');
     const formSubject = document.getElementById('form-subject');
-    
-    // Elementos do Modal
     const statusModal = document.getElementById('status-modal');
     const modalTitle = document.getElementById('modal-title');
     const modalMessage = document.getElementById('modal-message');
     const closeModalBtn = document.getElementById('close-modal-btn');
 
-    // Função para mostrar/esconder campos de orçamento E definir o assunto
     function toggleOrcamentoFields() {
         if (objetivoOrcamento && objetivoOrcamento.checked) {
             orcamentoFields.classList.remove('hidden');
-            if (formSubject) formSubject.value = "Contato do Site: Pedido de Orçamento"; // Define o assunto para Orçamento
+            if (formSubject) formSubject.value = "Contato do Site: Pedido de Orçamento";
         } else if (orcamentoFields) {
             orcamentoFields.classList.add('hidden');
-            if (formSubject) formSubject.value = "Contato do Site: Dúvida"; // Define o assunto para Dúvida
+            if (formSubject) formSubject.value = "Contato do Site: Dúvida";
         }
     }
 
     if (objetivoDuvida) objetivoDuvida.addEventListener('change', toggleOrcamentoFields);
     if (objetivoOrcamento) objetivoOrcamento.addEventListener('change', toggleOrcamentoFields);
-    if (form) toggleOrcamentoFields(); // Verifica o estado inicial
+    if (form) toggleOrcamentoFields();
 
-    // Função para mostrar o modal
     function showModal(title, message) {
         if(statusModal) {
             modalTitle.textContent = title;
@@ -65,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Função para esconder o modal
     function hideModal() {
         if(statusModal) statusModal.classList.add('hidden');
     }
@@ -75,9 +113,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (event.target === statusModal) hideModal();
     });
 
-    // Lógica de envio do formulário com AJAX
     async function handleSubmit(event) {
-        event.preventDefault(); // Impede o redirecionamento padrão
+        event.preventDefault();
         const data = new FormData(event.target);
         
         try {
@@ -89,9 +126,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (response.ok) {
                 showModal("Sucesso!", "Sua mensagem foi enviada. Entraremos em contato em breve.");
-                form.reset(); // Limpa o formulário
+                form.reset();
                 if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
-                toggleOrcamentoFields(); // Garante que os campos de orçamento voltem ao estado inicial
+                toggleOrcamentoFields();
             } else {
                 const responseData = await response.json();
                 const errorMsg = responseData.errors ? responseData.errors.map(e => e.message).join(", ") : "Tente novamente mais tarde.";
