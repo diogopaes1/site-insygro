@@ -7,6 +7,7 @@
     <title>Insygro - Ciência & Tecnologia</title>
     <link rel="icon" href="Image/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chatbot.css">
 </head>
 <body>
     <header>
@@ -117,5 +118,26 @@
 
     <script src="js/script.js"></script>
     <script src="js/animations.js"></script>
+    <!-- Chatbot da Insygro -->
+    <div class="chatbot-container">
+        <div class="chat-window" id="chat-window">
+            <div class="chat-header">
+                <h3>Fale com o Synapse</h3>
+                <p>Assistente Virtual da Insygro</p>
+            </div>
+            <div class="chat-body" id="chat-body">
+                <!-- Mensagens do chat aparecerão aqui -->
+            </div>
+            <div class="chat-footer">
+                <input type="text" id="chat-input" placeholder="Digite sua pergunta...">
+                <button id="send-btn"></button>
+            </div>
+        </div>
+        <div class="chatbot-icon" id="chatbot-icon">
+            <img src="Image/chatbot-mascote.png" alt="Abrir Chat">
+        </div>
+    </div>
+    <script src="js/chatbot.js"></script>
+    <!-- Fim do Chatbot -->
 </body>
 </html>
