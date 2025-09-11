@@ -281,6 +281,102 @@ nav a:hover, nav a.active {
     color: var(--primary-green);
 }
 
+.testimonial-card cite {
+    display: block;
+    margin-top: 1rem;
+    font-weight: bold;
+    color: var(--primary-green);
+}
+
+/* --- Divisor de Seção --- */
+.section-divider {
+    border: 0;
+    height: 1px;
+    background-color: #ddd;
+    margin: 4rem 0;
+}
+
+/* --- Seção de Colaboradores (Página Sobre) - ESTILOS REVISADOS --- */
+.collaborators-section h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.collaborator-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+    align-items: start; /* Alinha os cards no topo */
+}
+
+.collaborator-card {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem; /* Padding reduzido */
+    text-align: center; /* Centraliza todo o conteúdo */
+}
+
+.collaborator-photo {
+    width: 120px; /* Tamanho da miniatura */
+    height: 120px; /* Tamanho da miniatura */
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 1rem auto; /* Margem inferior reduzida */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.collaborator-card h3 {
+    font-size: 1.1rem; /* Fonte do nome reduzida */
+    margin-bottom: 0.25rem; /* Espaçamento reduzido */
+    text-align: center;
+}
+
+.collaborator-email {
+    font-size: 0.85rem; /* Fonte do email reduzida */
+    margin-bottom: 1rem; /* Espaçamento reduzido */
+    text-align: center;
+}
+
+.collaborator-email a {
+    color: var(--primary-green);
+    text-decoration: none;
+}
+
+.collaborator-email a:hover {
+    text-decoration: underline;
+}
+
+.collaborator-description {
+    font-style: italic;
+    color: #555;
+    font-size: 0.9rem; /* Fonte da descrição reduzida */
+    margin-bottom: 1rem; /* Espaçamento reduzido */
+    text-align: center;
+}
+
+.collaborator-card h4 {
+    font-size: 0.95rem; /* Fonte do subtítulo reduzida */
+    color: var(--dark-green);
+    margin-top: 0;
+    margin-bottom: 0.5rem; /* Espaçamento reduzido */
+    text-align: center;
+}
+
+.collaborator-card ul {
+    list-style: none; /* Remove os marcadores de lista */
+    padding-left: 0;
+    color: #555;
+    font-size: 0.85rem; /* Fonte da lista reduzida */
+    line-height: 1.4; /* Espaçamento entre linhas reduzido */
+    text-align: center;
+    margin: 0;
+}
+
+.collaborator-card ul li {
+    margin-bottom: 0.25rem; /* Espaçamento entre itens da lista reduzido */
+}
+
 /* --- Footer --- */
 footer {
     background-color: #000000;
