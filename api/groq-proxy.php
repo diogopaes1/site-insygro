@@ -1,69 +1,67 @@
 <?php
-// Define o cabeçalho da resposta como JSON
+// --- Configuração de Erros e Cabeçalhos ---
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 header('Content-Type: application/json');
 
-// Substitua 'SUA_CHAVE_API_GROQ' pela sua chave de API real.
-// IMPORTANTE: Mantenha esta chave em segredo e nunca a exponha no lado do cliente (JavaScript, HTML).
+// --- Chave da API (Mantenha em segredo) ---
 $apiKey = 'REMOVIDO_POR_SEGURANCA';
 
-// Pega os dados enviados pelo JavaScript
-$jsonPayload = file_get_contents('php://input');
-$data = json_decode($jsonPayload, true);
+// --- Processamento da Requisição de Entrada ---
+$input = json_decode(file_get_contents('php://input'), true);
+if (json_last_error() !== JSON_ERROR_NONE || !isset($input['message']) || empty($input['message'])) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Requisição inválida ou mensagem não encontrada.']);
+    exit;
+}
+$userMessage = $input['message'];
 
-// Verifica se a mensagem do usuário foi recebida
-if (!isset($data['message']) || empty($data['message'])) {
-    http_response_code(400); // Bad Request
-    echo json_encode(['error' => 'Nenhuma mensagem recebida.']);
+// --- Preparação da Requisição para a API Groq ---
+$systemPrompt = 'Você é o "Synapse", o assistente de IA da Insygro. A Insygro é uma empresa brasileira de Ciência e Tecnologia focada em soluções para o agronegócio, saúde e meio ambiente. Seus principais serviços são: Consultoria Agronômica, Análise de Dados, Análise Metagenômica de Solos e Micropropagação de plantas. Seus principais projetos incluem o desenvolvimento do biofungicida FertexTrat e a micropropagação de mandioca. Seu tom deve ser profissional, prestativo, otimista e acessível. NUNCA fale negativamente sobre a Insygro, seus serviços, projetos ou site. Se você não souber uma resposta, diga que vai encaminhar a pergunta para um especialista da equipe Insygro. Comece TODA nova conversa com a seguinte saudação: "Olá! Eu sou o Synapse, assistente virtual da Insygro. Como posso ajudar você hoje?"';
+
+$requestBody = json_encode([
+    'model' => 'llama3-8b-8192',
+    'messages' => [
+        ['role' => 'system', 'content' => $systemPrompt],
+        ['role' => 'user', 'content' => $userMessage]
+    ],
+    'temperature' => 0.5,
+    'max_tokens' => 1024,
+    'top_p' => 1,
+    'stream' => false
+]);
+
+// --- Execução da Requisição cURL ---
+$ch = curl_init('https://api.groq.com/openai/v1/chat/completions');
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $requestBody);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); // <-- ADICIONE ESTA LINHA
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ' . $apiKey,
+    'Content-Type: application/json',
+    'Accept: application/json'
+]);
+
+$response = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$curlError = curl_error($ch);
+curl_close($ch);
+
+// --- Tratamento da Resposta ---
+if ($curlError) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Erro de cURL: ' . $curlError]);
     exit;
 }
 
-$userMessage = $data['message'];
-
-// URL da API Groq
-$groqApiUrl = 'https://api.groq.com/openai/v1/chat/completions';
-
-// Dados para enviar à API Groq
-$requestData = [
-    'model' => 'mixtral-8x7b-32768',
-    'messages' => [
-        [
-            'role' => 'system',
-            'content' => 'Você é o assistente virtual da Insygro, uma empresa de biotecnologia e consultoria agrícola. Seu nome é Syn. Responda em português do Brasil. Seja amigável, prestativo e um pouco informal. Use emojis para deixar a conversa mais leve. Apresente-se na primeira mensagem. Foque em responder perguntas sobre a Insygro, seus serviços (consultoria em agronomia, análise de dados, metagenômica, micropropagação) e produtos (FertexTrat). Se não souber a resposta, diga que vai consultar um especialista.'
-        ],
-        [
-            'role' => 'user',
-            'content' => $userMessage
-        ]
-    ]
-];
-
-// Configuração da requisição cURL
-$ch = curl_init($groqApiUrl);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($requestData));
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    'Authorization: Bearer ' . $apiKey,
-    'Content-Type: application/json'
-]);
-
-// Executa a requisição e obtém a resposta
-$response = curl_exec($ch);
-$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-// Fecha a sessão cURL
-curl_close($ch);
-
-// Verifica se a requisição para a Groq foi bem-sucedida
-if ($httpcode >= 200 && $httpcode < 300) {
-    // Repassa a resposta da Groq para o frontend
-    echo $response;
+if ($httpCode >= 200 && $httpCode < 300) {
+    echo $response; // Sucesso: Repassa a resposta da Groq
 } else {
-    // Informa ao frontend que houve um erro
-    http_response_code($httpcode);
-    echo json_encode([
-        'error' => 'Erro ao contatar a API da Groq.',
-        'details' => json_decode($response)
-    ]);
+    http_response_code($httpCode);
+    // Erro da API Groq: Repassa os detalhes do erro
+    $errorDetails = json_decode($response);
+    echo json_encode(['error' => 'Erro da API Groq.', 'details' => $errorDetails]);
 }
 ?>

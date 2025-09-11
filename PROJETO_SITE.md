@@ -103,3 +103,14 @@ Antes de fazer o upload de uma nova versão do site para a Hostinger, siga este 
     -   Ao criar o arquivo `.zip`, você selecionou os arquivos *dentro* da pasta do projeto e **NÃO** incluiu a pasta `.git`?
 
 Seguir este checklist garantirá que as atualizações futuras sejam tranquilas e sem surpresas.
+
+## Implementação do Chatbot com IA (Synapse)
+
+- **Objetivo:** Adicionar um assistente virtual interativo ao site para responder perguntas dos usuários em tempo real.
+- **Tecnologia:**
+  - **Frontend:** A interface do chat foi construída com HTML, CSS e JavaScript (`chatbot.js`, `chatbot.css`).
+  - **Backend (Proxy):** Para proteger a chave da API e gerenciar a lógica, foi criado um proxy em PHP (`api/groq-proxy.php`). Esta abordagem é segura e adequada para ambientes de hospedagem compartilhada como a Hostinger.
+  - **IA:** A inteligência artificial é fornecida pela **Groq API**, utilizando o modelo `llama3-8b-8192`.
+- **Configuração do Servidor:**
+  - Foi criado um arquivo `.htaccess` na raiz do projeto para garantir que as chamadas do JavaScript para o proxy PHP não sejam bloqueadas ou redirecionadas pelas configurações do servidor.
+- **Status:** Implementado e em fase de testes/produção.

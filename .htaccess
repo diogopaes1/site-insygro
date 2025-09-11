@@ -1,0 +1,11 @@
+# Desativa o motor de reescrita para o diretório da API
+# Isso impede que outras regras interfiram com a chamada ao proxy.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^api/ - [L]
+</IfModule>
+
+# Impede que os usuários listem o conteúdo do diretório da API
+<IfModule mod_autoindex.c>
+    Options -Indexes
+</IfModule>
