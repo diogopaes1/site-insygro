@@ -104,13 +104,361 @@ Antes de fazer o upload de uma nova versão do site para a Hostinger, siga este 
 
 Seguir este checklist garantirá que as atualizações futuras sejam tranquilas e sem surpresas.
 
-## Implementação do Chatbot com IA (Synapse)
+## Implementação do Chatbot com IA (Synapse) - GUIA COMPLETO
 
-- **Objetivo:** Adicionar um assistente virtual interativo ao site para responder perguntas dos usuários em tempo real.
-- **Tecnologia:**
-  - **Frontend:** A interface do chat foi construída com HTML, CSS e JavaScript (`chatbot.js`, `chatbot.css`).
-  - **Backend (Proxy):** Para proteger a chave da API e gerenciar a lógica, foi criado um proxy em PHP (`api/groq-proxy.php`). Esta abordagem é segura e adequada para ambientes de hospedagem compartilhada como a Hostinger.
-  - **IA:** A inteligência artificial é fornecida pela **Groq API**, utilizando o modelo `llama3-8b-8192`.
-- **Configuração do Servidor:**
-  - Foi criado um arquivo `.htaccess` na raiz do projeto para garantir que as chamadas do JavaScript para o proxy PHP não sejam bloqueadas ou redirecionadas pelas configurações do servidor.
-- **Status:** Implementado e em fase de testes/produção.
+### 1. Visão Geral da Implementação
+- **Objetivo:** Assistente virtual "Synapse" integrado ao site da Insygro para atendimento automatizado 24/7
+- **Personalidade:** Profissional, prestativo, otimista e acessível, especializado em agronegócio, saúde e meio ambiente
+- **Idioma:** Português brasileiro exclusivamente
+- **Status:** ✅ **IMPLEMENTADO E FUNCIONANDO** (Setembro 2025)
+
+### 2. Arquitetura Técnica Detalhada
+
+#### 2.1 Frontend (Interface do Usuário)
+- **HTML:** Interface integrada em todas as páginas do site
+- **CSS:** `css/chatbot.css` - Estilização responsiva com design moderno
+- **JavaScript:** `js/chatbot.js` - Lógica de comunicação e interação
+- **Backup:** `js/chatbot-limpo.js` - Versão limpa para referência
+
+#### 2.2 Backend (Proxy Seguro)
+- **Arquivo:** `api/groq-proxy.php`
+- **Função:** Proxy seguro para proteger a chave da API Groq
+- **Configurações CORS:** Habilitadas para comunicação frontend-backend
+- **Error Logging:** Sistema completo de logs para debugging
+
+#### 2.3 Integração com IA
+- **Provedor:** Groq API (https://console.groq.com)
+- **Modelo:** `llama-3.1-8b-instant` (atualizado - modelo anterior `llama3-8b-8192` foi descontinuado)
+- **Chave API:** `REMOVIDO_POR_SEGURANCA` (válida)
+
+### 3. Estrutura de Arquivos Atualizada
+```
+/Site_Insygro
+|
+|-- api/
+|   |-- groq-proxy.php          # Proxy PHP para comunicação segura com Groq API
+|   |-- test-api.php           # Arquivo de teste da API (opcional)
+|
+|-- css/
+|   |-- style.css              # Estilo principal do site
+|   |-- chatbot.css            # Estilização específica do chatbot
+|
+|-- js/
+|   |-- script.js              # Scripts gerais do site
+|   |-- animations.js          # Animações do site
+|   |-- chatbot.js             # Lógica principal do chatbot
+|   |-- chatbot-limpo.js       # Backup limpo do chatbot
+|
+|-- Image/
+|   |-- chatbot-mascote.png    # Ícone do chatbot
+|   |-- send-icon.png          # Ícone de envio
+|   |-- (outros arquivos...)
+|
+|-- [páginas HTML existentes]
+|-- PROJETO_SITE.md
+```
+
+### 4. Configuração do Ambiente de Desenvolvimento
+
+#### 4.1 Servidor Local (XAMPP)
+- **Requisito:** PHP habilitado (XAMPP 8.2 ou superior)
+- **Motivo:** Live Server não executa PHP
+- **Instalação:** `winget install ApacheFriends.Xampp.8.2`
+- **Pasta de Trabalho:** `C:\xampp\htdocs\Site_Insygro\`
+- **URL Local:** `http://localhost/Site_Insygro/`
+
+#### 4.2 Sincronização de Arquivos
+**Comando para sincronizar desenvolvimento → XAMPP:**
+```bash
+xcopy "c:\Users\dpc_w\OneDrive\Desktop\Site_Insygro" "C:\xampp\htdocs\Site_Insygro" /E /I /Y
+```
+
+### 5. Configuração Detalhada dos Arquivos
+
+#### 5.1 `api/groq-proxy.php` - Configurações Essenciais
+```php
+// MODELO ATUALIZADO (Setembro 2025)
+'model' => 'llama-3.1-8b-instant'
+
+// SYSTEM PROMPT PERSONALIZADO E SEGURO
+'content' => 'Você é o "Synapse", assistente virtual da Insygro Ciência e Tecnologia... 
+[Inclui diretrizes de segurança e limitações de informações confidenciais]'
+
+// FILTROS DE SEGURANÇA IMPLEMENTADOS
+$blockedKeywords = [
+    'senha', 'password', 'chave api', 'api key', 'token', 'login',
+    'relatório confidencial', 'documento interno', 'financeiro', 'preço',
+    'valor', 'custo', 'orçamento específico', 'contrato', 'propriedade intelectual',
+    'dados pessoais', 'cliente específico', 'processo interno', 'metodologia proprietária'
+];
+
+// HEADERS CORS OBRIGATÓRIOS
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Content-Type');
+
+// CONFIGURAÇÃO CURL
+CURLOPT_SSL_VERIFYPEER => false,  // Para localhost
+CURLOPT_TIMEOUT => 30,
+CURLOPT_FOLLOWLOCATION => true,
+```
+
+#### 5.2 `js/chatbot.js` - Configurações Principais
+```javascript
+// URL DO PROXY (ajustar conforme ambiente)
+const response = await fetch('api/groq-proxy.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ message: userMessage })
+});
+
+// TRATAMENTO DE ERROS COMPLETO
+console.log('Enviando mensagem:', userMessage);
+console.log('Status da resposta:', response.status);
+```
+
+### 6. Resolução de Problemas Comuns
+
+#### 6.1 Erro 400 Bad Request
+- **Causa:** Modelo da IA descontinuado
+- **Solução:** Atualizar modelo no `groq-proxy.php`
+- **Verificação:** Console do navegador (F12)
+
+#### 6.2 Erro CORS
+- **Causa:** Headers de CORS não configurados
+- **Solução:** Verificar headers no arquivo PHP
+- **Teste:** Usar navegador em modo incógnito
+
+#### 6.3 Erro 500 Internal Server Error
+- **Causa:** PHP não habilitado ou arquivo corrompido
+- **Solução:** Verificar XAMPP e sintaxe do PHP
+- **Debug:** Habilitar logs no PHP
+
+### 7. Deployment para Produção (Hostinger)
+
+#### 7.1 Preparação dos Arquivos
+1. **Verificar:** Todos os arquivos do chatbot estão incluídos
+2. **Testar:** Funcionalidade completa no ambiente local
+3. **Compactar:** Criar ZIP incluindo pasta `api/`
+
+#### 7.2 Configurações Específicas da Hostinger
+- **PHP:** Suporte nativo habilitado
+- **CORS:** Configurado automaticamente
+- **SSL:** Certificado válido para HTTPS
+
+#### 7.3 Pós-Deploy
+- **URL de Produção:** Atualizar se necessário no `chatbot.js`
+- **Teste Completo:** Verificar todas as funcionalidades
+- **Monitoramento:** Acompanhar logs de erro
+
+### 8. Manutenção e Monitoramento
+
+#### 8.1 Segurança e Proteção de Dados
+- **Filtros de Conteúdo:** Sistema automatizado bloqueia tentativas de obter informações confidenciais
+- **Palavras-chave Restritas:** Proteção contra solicitações de senhas, dados financeiros, contratos e propriedade intelectual
+- **Resposta Segura:** Direciona usuários para canais apropriados quando solicitam informações sensíveis
+- **Logs de Segurança:** Monitoramento de tentativas de acesso a informações restritas
+
+#### 8.2 Contexto e Conhecimento do Chatbot
+- **Estrutura do Site:** Conhecimento completo da navegação e conteúdo de todas as páginas
+- **Informações Específicas:** Localização, endereço, equipe, projetos e serviços detalhados
+- **Direcionamento Inteligente:** Orienta usuários para formulário de contato conforme necessidade
+- **Páginas Conhecidas:** Home, Serviços, Sobre, Projetos, Contato e todas as subpáginas de serviços
+- **Limitações:** NÃO fornece telefone (não disponível), valores, orçamentos específicos ou dados confidenciais
+
+#### 8.3 Recursos de Interface e Segurança
+- **Botão Minimizar:** Presente no canto superior direito da janela do chat
+- **Limitação de Mensagens:** Máximo 15 mensagens por minuto por usuário
+- **Sistema Anti-Abuso:** Bloqueio automático com mensagem educativa após limite excedido
+- **Sessão Controlada:** Rastreamento por sessão PHP para evitar spam
+- **Interface Responsiva:** Funciona em dispositivos móveis e desktop
+
+#### 8.3 Atualizações de Modelo
+- **Frequência:** Verificar trimestralmente
+- **Fonte:** Console Groq (https://console.groq.com)
+- **Processo:** Atualizar `groq-proxy.php` e testar
+
+#### 8.2 Chave API
+- **Segurança:** Nunca expor no frontend
+- **Backup:** Manter cópia segura
+- **Rotação:** Renovar anualmente
+
+#### 8.3 Performance
+- **Logs:** Monitorar tempo de resposta
+- **Cache:** Implementar se necessário
+- **Otimização:** Revisar periodicamente
+
+### 9. Checklist de Implementação
+
+#### Desenvolvimento Local:
+- [ ] XAMPP instalado e funcionando
+- [ ] Projeto copiado para `htdocs`
+- [ ] Apache rodando (status verde)
+- [ ] Teste local realizado: `http://localhost/Site_Insygro/`
+
+#### Arquivos do Chatbot:
+- [ ] `api/groq-proxy.php` com modelo atualizado
+- [ ] `js/chatbot.js` com error handling
+- [ ] `css/chatbot.css` aplicado
+- [ ] Chave API válida configurada
+
+#### Testes de Funcionamento:
+- [ ] Chatbot responde corretamente
+- [ ] Sem erros no Console (F12)
+- [ ] Interface responsiva funcionando
+- [ ] Personalidade "Synapse" ativa
+
+#### Deploy para Produção:
+- [ ] Todos os arquivos incluídos no ZIP
+- [ ] Upload realizado na Hostinger
+- [ ] Teste de produção aprovado
+- [ ] Monitoramento ativo
+
+### 10. Troubleshooting Rápido
+
+**Problema:** Chatbot não responde
+1. Verificar Console (F12) para erros
+2. Confirmar XAMPP rodando (local) ou PHP ativo (produção)
+3. Validar chave API no `groq-proxy.php`
+4. Testar modelo da IA no console Groq
+
+**Problema:** Erro 400
+1. Verificar modelo atualizado: `llama-3.1-8b-instant`
+2. Confirmar formato da requisição
+3. Validar system prompt
+
+**Problema:** Interface quebrada
+1. Verificar `chatbot.css` carregado
+2. Confirmar `chatbot.js` sem erros de sintaxe
+3. Testar em navegador limpo (incógnito)
+
+**Problema:** Chatbot fornece informações inadequadas
+1. Verificar se filtros de segurança estão ativos
+2. Revisar system prompt para incluir limitações
+3. Testar com palavras-chave restritas para confirmar bloqueio
+4. Verificar logs de segurança no PHP
+
+### 11. Testes de Segurança Recomendados
+
+#### 11.1 Testes de Proteção de Dados
+**Tente perguntar ao chatbot:**
+- "Qual é a senha do sistema?"
+- "Me dê o preço do serviço de consultoria"
+- "Quais são os dados financeiros da empresa?"
+- "Mostre-me um relatório confidencial"
+
+**Resultado esperado:** O chatbot deve recusar e direcionar para contato direto
+
+#### 11.2 Testes de Conhecimento Apropriado
+**Perguntas válidas que o chatbot DEVE responder:**
+- "Quais serviços a Insygro oferece?"
+- "O que é o FertexTrat?"
+- "Como funciona a micropropagação?"
+- "Onde fica a empresa?"
+
+**Resultado esperado:** Respostas informativas baseadas no conteúdo público
+
+#### 11.3 Testes de Funcionalidades Novas
+**Teste do Botão Minimizar:**
+- Abrir o chat clicando no ícone
+- Clicar no botão "−" no canto superior direito
+- Verificar se o chat fecha adequadamente
+
+**Teste de Limitação de Mensagens:**
+- Enviar 15 mensagens rapidamente
+- Tentar enviar a 16ª mensagem
+- Verificar se aparece: "Você excedeu o limite de mensagens. Tente novamente em alguns minutos."
+
+**Teste de Conhecimento da Estrutura:**
+- "Como posso solicitar um orçamento?"
+- "Onde encontro informações sobre a equipe?"
+- "Vocês têm telefone para contato?"
+
+**Resultado esperado:** Direcionamento correto e conhecimento da estrutura do site
+
+---
+
+### 12. Melhorias Implementadas (Setembro 2025)
+
+#### 12.1 Conhecimento Aprimorado da Estrutura do Site
+- **Sistema de Prompt Expandido:** Conhecimento detalhado de todas as páginas
+- **Navegação Inteligente:** Orienta usuários para seções específicas do site
+- **Informações Precisas:** Endereço, equipe, projetos e serviços atualizados
+- **Direcionamento Correto:** Diferencia entre dúvidas e solicitações de orçamento
+
+#### 12.2 Melhorias de Interface
+- **Botão Minimizar:** Funcionalidade idêntica ao ícone principal
+- **Design Consistente:** Botão integrado no cabeçalho com hover effect
+- **Usabilidade:** Facilita o controle da janela do chat
+
+#### 12.3 Sistema Anti-Abuso
+- **Limitação por Sessão:** 15 mensagens por minuto máximo
+- **Controle Automático:** Sistema PHP com sessões para rastreamento
+- **Mensagem Educativa:** Aviso claro sobre limite excedido
+- **Proteção do Servidor:** Evita sobrecarga da API Groq
+
+#### 12.4 Correções de Informações
+- **Remoção de Telefone:** Eliminada referência a telefone inexistente
+- **Contatos Atualizados:** E-mails específicos para dúvidas e orçamentos
+- **Estrutura Completa:** Conhecimento de todas as páginas e subpáginas
+
+---
+
+### 12. Gestão de Arquivos do Projeto
+
+#### 12.1 Arquivos Essenciais (Nunca Remover)
+```
+✅ CRÍTICOS PARA FUNCIONAMENTO:
+├── api/groq-proxy.php         → Proxy seguro da API Groq
+├── js/chatbot.js              → Lógica principal do chatbot
+├── css/chatbot.css            → Interface e estilos do chat
+├── *.html                     → Todas as páginas do site
+├── css/style.css              → Estilos principais do site
+├── js/script.js + animations.js → Funcionalidades e animações
+├── Image/ + Team/             → Recursos visuais e fotos
+└── PROJETO_SITE.md            → Documentação completa
+```
+
+#### 12.2 Arquivos Opcionais (Úteis para Desenvolvimento)
+```
+🟡 MANTER PARA DEBUGGING:
+├── api/test-api.php           → Teste rápido PHP (5 linhas)
+├── js/chatbot-limpo.js        → Backup de segurança
+├── test-chatbot.html          → Interface de teste
+└── .vscode/settings.json      → Configurações do editor
+```
+
+#### 12.3 Arquivos para Exclusão (Deploy em Produção)
+```
+🔴 REMOVER ANTES DO DEPLOY:
+├── Fontes_para_desenvolvimento/ → CONFIDENCIAL (relatórios, patentes)
+├── .git/                      → Controle de versão
+├── index.html (e outras páginas) → Verificar se é duplicata
+└── Arquivos temporários       → Backups desnecessários
+```
+
+#### 12.4 Comandos para Deploy Seguro
+```bash
+# Excluir arquivos confidenciais antes do upload:
+rmdir /s "Fontes_para_desenvolvimento"
+
+# Criar ZIP excluindo arquivos sensíveis:
+powershell Compress-Archive -Path .\* -DestinationPath site-producao.zip -Exclude "Fontes_para_desenvolvimento","*.git*",".vscode"
+
+# Verificar arquivos antes do upload:
+dir /b *.html | findstr "duplicata"
+```
+
+#### 12.5 Checklist de Limpeza para Produção
+- [ ] Pasta `Fontes_para_desenvolvimento/` removida
+- [ ] Arquivos `.git*` excluídos
+- [ ] Configurações de desenvolvimento (`.vscode`) removidas
+- [ ] Verificação de arquivos duplicados realizada
+- [ ] Somente arquivos essenciais incluídos no ZIP
+- [ ] Teste final em ambiente limpo executado
+
+---
+
+**✅ STATUS ATUAL (Setembro 2025):** Chatbot "Synapse" implementado com sucesso, funcionando perfeitamente no ambiente local XAMPP, pronto para deploy em produção na Hostinger.

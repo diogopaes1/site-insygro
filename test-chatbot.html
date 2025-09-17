@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste do Chatbot</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-container { max-width: 600px; margin: 0 auto; }
+        .test-button { background: #6EBE45; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 10px 0; }
+        .result { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Teste do Chatbot Insygro</h1>
+        
+        <h2>1. Teste do PHP</h2>
+        <button class="test-button" onclick="testPHP()">Testar PHP</button>
+        <div id="php-result" class="result"></div>
+        
+        <h2>2. Teste do Chatbot</h2>
+        <button class="test-button" onclick="testChatbot()">Testar Chatbot</button>
+        <div id="chatbot-result" class="result"></div>
+        
+        <h2>Instruções:</h2>
+        <ol>
+            <li>Abra o XAMPP Control Panel (que acabou de abrir)</li>
+            <li>Clique em "Start" ao lado do Apache</li>
+            <li>Acesse: <a href="http://localhost/Site_Insygro/test-chatbot.html" target="_blank">http://localhost/Site_Insygro/test-chatbot.html</a></li>
+            <li>Teste os botões acima</li>
+            <li>Se funcionarem, seu chatbot está pronto!</li>
+        </ol>
+    </div>
+
+    <script>
+        async function testPHP() {
+            const result = document.getElementById('php-result');
+            result.innerHTML = 'Testando...';
+            
+            try {
+                const response = await fetch('api/test-api.php');
+                const data = await response.json();
+                result.innerHTML = `✅ PHP OK: ${data.message} (${data.timestamp})`;
+            } catch (error) {
+                result.innerHTML = `❌ Erro PHP: ${error.message}`;
+            }
+        }
+        
+        async function testChatbot() {
+            const result = document.getElementById('chatbot-result');
+            result.innerHTML = 'Testando...';
+            
+            try {
+                const response = await fetch('api/groq-proxy.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: 'Olá, você está funcionando?' })
+                });
+                
+                const data = await response.json();
+                if (data.success && data.choices) {
+                    result.innerHTML = `✅ Chatbot OK: ${data.choices[0].message.content}`;
+                } else {
+                    result.innerHTML = `❌ Erro: ${JSON.stringify(data)}`;
+                }
+            } catch (error) {
+                result.innerHTML = `❌ Erro Chatbot: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

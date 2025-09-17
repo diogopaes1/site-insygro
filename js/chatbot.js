@@ -4,11 +4,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatBody = document.getElementById('chat-body');
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
+    const minimizeBtn = document.getElementById('minimize-btn');
 
     // --- Lógica para abrir e fechar o chat ---
-    chatbotIcon.addEventListener('click', () => {
+    function toggleChat() {
         chatWindow.classList.toggle('open');
-    });
+    }
+
+    chatbotIcon.addEventListener('click', toggleChat);
+    if (minimizeBtn) {
+        minimizeBtn.addEventListener('click', toggleChat);
+    }
 
     // --- Lógica de envio de mensagem ---
     sendBtn.addEventListener('click', sendMessage);
@@ -39,39 +45,59 @@ document.addEventListener('DOMContentLoaded', () => {
         return messageElement;
     }
 
-    // --- Lógica da API (CORRIGIDA PARA CHAMAR O PROXY PHP) ---
+    // --- Lógica da API (VERSÃO FINAL E FUNCIONAL) ---
     async function getAIResponse(userMessage) {
         const typingIndicator = addMessageToChat('bot', 'Synapse está digitando...');
         typingIndicator.classList.add('typing');
 
-        const proxyUrl = '/api/groq-proxy.php';
-
         try {
-            const response = await fetch(proxyUrl, {
+            console.log('Enviando mensagem:', userMessage);
+
+            const response = await fetch('api/groq-proxy.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json' // <-- ADICIONE ESTA LINHA
+                    'Accept': 'application/json'
                 },
-                body: JSON.stringify({ message: userMessage }) 
+                body: JSON.stringify({ message: userMessage })
             });
 
-            const data = await response.json();
+            console.log('Status da resposta:', response.status);
 
             if (!response.ok) {
-                // Se o servidor retornou um erro (como 400 ou 500), exibe a mensagem de erro do PHP
-                throw new Error(data.error || 'Erro desconhecido do servidor.');
+                if (response.status === 429) {
+                    // Limite de mensagens excedido
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.message || 'Limite de mensagens excedido. Tente novamente em alguns minutos.');
+                }
+                
+                const errorData = await response.json().catch(() => ({}));
+                console.error('Erro HTTP:', response.status, errorData);
+                throw new Error(`Erro do servidor: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('Resposta completa:', data);
+
+            // Extrai a resposta do chatbot
+            let botResponse;
+            
+            if (data.success && data.choices && data.choices[0] && data.choices[0].message) {
+                botResponse = data.choices[0].message.content;
+            } else if (data.choices && data.choices[0] && data.choices[0].message) {
+                botResponse = data.choices[0].message.content;
+            } else if (data.error) {
+                throw new Error(data.error);
+            } else {
+                throw new Error('Formato de resposta inesperado');
             }
             
-            // A resposta da Groq vem dentro da propriedade 'choices'
-            const botResponse = data.choices[0]?.message?.content.trim();
-            
-            typingIndicator.textContent = botResponse;
+            typingIndicator.textContent = botResponse.trim();
             typingIndicator.classList.remove('typing');
 
         } catch (error) {
-            console.error("Erro ao contatar a IA via proxy:", error);
-            typingIndicator.textContent = "Desculpe, estou com um problema de conexão. Por favor, tente novamente mais tarde ou contate-nos diretamente.";
+            console.error("Erro detalhado:", error);
+            typingIndicator.textContent = "Desculpe, estou temporariamente indisponível. Tente novamente em alguns instantes.";
             typingIndicator.classList.remove('typing');
         }
     }

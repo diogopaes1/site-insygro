@@ -131,8 +131,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 toggleOrcamentoFields();
             } else {
                 const responseData = await response.json();
-                const errorMsg = responseData.errors ? responseData.errors.map(e => e.message).join(", ") : "Tente novamente mais tarde.";
-                showModal("Erro no Envio", `Houve um problema: ${errorMsg}`);
+                const errorMsg = responseData.errors ? responseData.errors.map(e => e.message).join(", ") : "Por favor, complete a verificação de segurança e tente novamente.";
+                showModal("Verificação de Segurança", `${errorMsg}`);
             }
         } catch (error) {
             showModal("Erro de Conexão", "Não foi possível conectar ao servidor. Verifique sua internet e tente novamente.");
@@ -140,4 +140,89 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (form) form.addEventListener("submit", handleSubmit);
+
+    // --- Formatação Automática do Telefone ---
+    const phoneInput = document.getElementById('phone');
+    
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+            
+            // Limita a 11 dígitos (DDD + 9 dígitos)
+            if (value.length > 11) {
+                value = value.slice(0, 11);
+            }
+            
+            // Aplica a formatação
+            if (value.length >= 3) {
+                if (value.length <= 6) {
+                    value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+                } else {
+                    value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7)}`;
+                }
+            } else if (value.length >= 1) {
+                value = `(${value}`;
+            }
+            
+            e.target.value = value;
+        });
+        
+        // Permite apenas números, backspace, delete e arrows
+        phoneInput.addEventListener('keydown', function(e) {
+            const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+            if (!allowedKeys.includes(e.key) && !/^\d$/.test(e.key)) {
+                e.preventDefault();
+            }
+        });
+    }
+
+    // --- Validação da Política de Privacidade ---
+    const privacyCheckbox = document.getElementById('privacy-consent');
+    const submitButton = document.querySelector('button[type="submit"]');
+    
+    if (privacyCheckbox && submitButton) {
+        function toggleSubmitButton() {
+            submitButton.disabled = !privacyCheckbox.checked;
+            submitButton.style.opacity = privacyCheckbox.checked ? '1' : '0.5';
+            submitButton.style.cursor = privacyCheckbox.checked ? 'pointer' : 'not-allowed';
+        }
+        
+        // Inicial
+        toggleSubmitButton();
+        
+        // Listener
+        privacyCheckbox.addEventListener('change', toggleSubmitButton);
+    }
+
+    // --- Contador de Caracteres para Textarea ---
+    const messageTextarea = document.getElementById('message');
+    if (messageTextarea) {
+        const maxLength = 2000; // Limite de caracteres
+        messageTextarea.setAttribute('maxlength', maxLength);
+        
+        // Criar elemento contador
+        const counter = document.createElement('div');
+        counter.className = 'char-counter';
+        counter.textContent = `0/${maxLength} caracteres`;
+        
+        // Inserir contador após a textarea
+        messageTextarea.parentNode.appendChild(counter);
+        
+        // Função para atualizar contador
+        function updateCounter() {
+            const currentLength = messageTextarea.value.length;
+            counter.textContent = `${currentLength}/${maxLength} caracteres`;
+            
+            // Adicionar classe warning quando próximo do limite
+            if (currentLength > maxLength * 0.9) {
+                counter.classList.add('warning');
+            } else {
+                counter.classList.remove('warning');
+            }
+        }
+        
+        // Listeners para atualizar contador
+        messageTextarea.addEventListener('input', updateCounter);
+        messageTextarea.addEventListener('keyup', updateCounter);
+    }
 });
