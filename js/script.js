@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     
+    // --- LÓGICA DO CARROSSEL DA PÁGINA INICIAL ---
     // --- Constantes Globais ---
     const burger = document.querySelector('.burger');
     const nav = document.querySelector('.nav-links');
@@ -224,5 +225,99 @@ document.addEventListener('DOMContentLoaded', function() {
         // Listeners para atualizar contador
         messageTextarea.addEventListener('input', updateCounter);
         messageTextarea.addEventListener('keyup', updateCounter);
+    }
+
+    // --- LÓGICA DO CARROSSEL DA PÁGINA INICIAL ---
+    const heroSection = document.querySelector('.hero');
+
+    // Executa o código do carrossel apenas se a seção .hero existir (ou seja, na página inicial)
+    if (heroSection) {
+        // Lista de imagens para o carrossel. Adicione ou remova imagens aqui.
+        const images = [
+            'Slider/Slider_1.jpg',
+            'Slider/Slider_2.jpg',
+            'Slider/Slider_3.jpg',
+            'Slider/Slider_4.jpg'
+            // Para adicionar mais imagens, basta adicionar uma nova linha:
+            // 'Slider/outra_imagem.jpg'
+        ];
+
+        if (images && images.length > 0) {
+            let currentSlide = 0;
+            let slideInterval;
+
+            // Limpa a seção hero antes de adicionar novos slides
+            heroSection.innerHTML = '';
+
+            // Cria os elementos de imagem (slides) e os indicadores (dots)
+            const dotsContainer = document.createElement('div');
+            dotsContainer.className = 'carousel-dots';
+
+            images.forEach((imgSrc, index) => {
+                // Cria o slide
+                const slide = document.createElement('img');
+                slide.className = 'hero-slide';
+                slide.src = imgSrc;
+                slide.alt = `Slide ${index + 1}`;
+                heroSection.appendChild(slide);
+
+                // Cria o dot
+                const dot = document.createElement('span');
+                dot.className = 'dot';
+                dot.addEventListener('click', () => {
+                    moveToSlide(index);
+                    resetInterval();
+                });
+                dotsContainer.appendChild(dot);
+            });
+
+            heroSection.appendChild(dotsContainer);
+
+            // Cria as setas de navegação
+            const prevArrow = document.createElement('button');
+            prevArrow.className = 'carousel-arrow prev';
+            prevArrow.innerHTML = '&#10094;'; // Seta para a esquerda
+            prevArrow.addEventListener('click', () => {
+                moveToSlide(currentSlide - 1);
+                resetInterval();
+            });
+
+            const nextArrow = document.createElement('button');
+            nextArrow.className = 'carousel-arrow next';
+            nextArrow.innerHTML = '&#10095;'; // Seta para a direita
+            nextArrow.addEventListener('click', () => {
+                moveToSlide(currentSlide + 1);
+                resetInterval();
+            });
+
+            heroSection.appendChild(prevArrow);
+            heroSection.appendChild(nextArrow);
+
+            const slides = document.querySelectorAll('.hero-slide');
+            const dots = document.querySelectorAll('.dot');
+
+            function moveToSlide(slideIndex) {
+                slides[currentSlide].classList.remove('active');
+                dots[currentSlide].classList.remove('active');
+                currentSlide = (slideIndex + slides.length) % slides.length;
+                slides[currentSlide].classList.add('active');
+                dots[currentSlide].classList.add('active');
+            }
+
+            function startInterval() {
+                slideInterval = setInterval(() => moveToSlide(currentSlide + 1), 10000); // Aumentado para 10 segundos
+            }
+
+            function resetInterval() {
+                clearInterval(slideInterval);
+                startInterval();
+            }
+
+            // Inicia o carrossel
+            moveToSlide(0);
+            if (images.length > 1) {
+                startInterval();
+            }
+        }
     }
 });

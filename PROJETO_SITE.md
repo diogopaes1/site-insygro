@@ -11,8 +11,8 @@ O objetivo é criar um site profissional e moderno para a Insygro, que sirva com
 ## 3. Estrutura de Páginas e Conteúdo
 
 ### a. Páginas Principais (Visíveis no Menu)
-- **`index.html` (Home):** Apresentação impactante, destacando os pilares: Biotecnologia Agrícola, Consultoria Agronômica e Análise de Dados Multissetorial. Incluir menções ao uso de IA.
-- **`servicos.html` (Serviços):** Página principal que funcionará como um portal, apresentando de forma criativa as três grandes áreas de serviço e direcionando para páginas de detalhes.
+- **`index.html` (Home):** Página principal com um carrossel de imagens dinâmico e seções destacando as quatro frentes de atuação da empresa.
+- **`servicos.html` (Serviços):** Página principal que funciona como um portal, apresentando os cinco serviços detalhados da empresa.
 - **`projetos.html` (Projetos/Portfólio):** Apresentará cases de sucesso de forma anônima, baseados nos relatórios, para demonstrar a expertise da empresa.
 - **`sobre.html` (Sobre Nós):** Conterá a história, missão, e o perfil técnico da equipe, reforçando a base científica da empresa.
 - **`contato.html` (Contato):** Página com o novo formulário de contato avançado.
@@ -20,7 +20,9 @@ O objetivo é criar um site profissional e moderno para a Insygro, que sirva com
 ### b. Subpáginas de Serviços (Acessadas via `servicos.html`)
 - **`servico-analise-dados.html`:** Detalhará os serviços de análise estatística e Big Data para diversas áreas.
 - **`servico-metagenomica.html`:** Foco nos serviços de bioinformática, análise de dados metagenômicos, SNPs, etc.
-- **`servico-agronomia.html`:** Detalhes sobre a consultoria em fertilidade do solo, manejo e análise de indicadores bioquímicos.
+- **`servico-agronomia.html`:** Detalhes sobre a consultoria, incluindo análise de solo, indicadores bioquímicos e a nova capacidade de análise geoespacial.
+- **`servico-micropropagacao.html`:** Detalhes sobre a produção de mudas in vitro.
+- **`servico-pd-biologico.html`:** Detalhes sobre o serviço de Pesquisa e Desenvolvimento de bioinsumos.
 
 ### c. `contato.html` (Funcionalidades Avançadas)
 - **Formulário Condicional:**
@@ -32,6 +34,14 @@ O objetivo é criar um site profissional e moderno para a Insygro, que sirva com
     - Integração com um serviço gratuito como o Google reCAPTCHA v2 ("Não sou um robô") para validar o envio do formulário.
 
 ## 4. Estrutura de Arquivos e Pastas (Atualizada)
+
+### a. Carrossel de Imagens (Página Inicial)
+- **Implementação:** Um carrossel de imagens foi adicionado à seção "hero" da `index.html`.
+- **Lógica:** O `js/script.js` contém a lógica para criar os slides, os controles de navegação (setas e indicadores) e a transição automática (atualmente configurada para 10 segundos).
+- **Fonte das Imagens:** As imagens são definidas em uma lista estática dentro do `js/script.js`. Para adicionar ou remover imagens, basta editar este array.
+- **Estilização:** O `css/style.css` usa a propriedade `aspect-ratio: 16 / 9` e `max-height` para garantir que o carrossel mantenha a proporção correta e não cresça excessivamente em telas largas.
+
+### b. Estrutura de Arquivos
 ```
 /Site_Insygro
 |
@@ -49,9 +59,13 @@ O objetivo é criar um site profissional e moderno para a Insygro, que sirva com
 |-- projetos.html
 |-- sobre.html
 |-- contato.html
-|-- servico-analise-dados.html  # NOVA PÁGINA
-|-- servico-metagenomica.html # NOVA PÁGINA
-|-- servico-agronomia.html    # NOVA PÁGINA
+|-- servico-analise-dados.html
+|-- servico-metagenomica.html
+|-- servico-agronomia.html
+|-- servico-micropropagacao.html
+|-- servico-pd-biologico.html
+|-- FertExtrat.html
+|-- micropropagacao-mandioca.html
 |-- PROJETO_SITE.md
 ```
 
@@ -130,6 +144,7 @@ Seguir este checklist garantirá que as atualizações futuras sejam tranquilas 
 - **Provedor:** Groq API (https://console.groq.com)
 - **Modelo:** `llama-3.1-8b-instant` (atualizado - modelo anterior `llama3-8b-8192` foi descontinuado)
 - **Chave API:** `REMOVIDO_POR_SEGURANCA` (válida)
+- **Chave API:** `[CONFIGURADA_DIRETAMENTE_NO_ARQUIVO_PHP]` (Não armazenar neste documento por segurança)
 
 ### 3. Estrutura de Arquivos Atualizada
 ```
@@ -354,7 +369,7 @@ console.log('Status da resposta:', response.status);
 #### 11.2 Testes de Conhecimento Apropriado
 **Perguntas válidas que o chatbot DEVE responder:**
 - "Quais serviços a Insygro oferece?"
-- "O que é o FertexTrat?"
+- "O que é o FertExtrat?"
 - "Como funciona a micropropagação?"
 - "Onde fica a empresa?"
 

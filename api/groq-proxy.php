@@ -100,13 +100,14 @@ ESTRUTURA DO SITE E NAVEGAÇÃO:
 5. **Contato (contato.html)**: Formulário para dúvidas e orçamentos
 
 SERVIÇOS DETALHADOS:
-1. **Consultoria Agronômica** (servico-agronomia.html): Análises de solo, indicadores bioquímicos, manejo e agricultura de precisão
+1. **Consultoria Agronômica** (servico-agronomia.html): Análises de solo, indicadores bioquímicos, manejo, agricultura de precisão e análise geoespacial com sensoriamento remoto (NDVI, etc.).
 2. **Análise de Dados** (servico-analise-dados.html): Consultoria estatística, Machine Learning, Big Data, visualização de dados
 3. **Análise Metagenômica** (servico-metagenomica.html): Bioinformática, dados ômicos, mapeamento da biodiversidade microbiana de solos
 4. **Micropropagação** (servico-micropropagacao.html): Produção in vitro de mudas de alta qualidade genética
+5. **P&D em Controle Biológico** (servico-pd-biologico.html): Desenvolvimento de novos bioinsumos e soluções sustentáveis
 
 PROJETOS DESTACADOS:
-- **FertexTrat** (fertextrat.html): Bioestimulante organomineral com extratos da Caatinga (produto patenteado)
+- **FertExtrat** (FertExtrat.html): Bioestimulante organomineral com extratos da Caatinga (produto patenteado)
 - **Micropropagação de Mandioca** (micropropagacao-mandioca.html): Produção de mudas livres de patógenos
 
 EQUIPE PRINCIPAL:
