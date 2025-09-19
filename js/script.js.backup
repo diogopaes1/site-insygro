@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Só executa a animação se 'animate' for verdadeiro
         if (animate) {
             navLinks.forEach((link, index) => {
-                link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.5}s`;
+                link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`;
             });
         }
     }
@@ -26,11 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function closeNav() {
         if (!nav || !body || !burger) return;
         nav.classList.remove('nav-active');
-        nav.classList.remove('nav-static-open'); // Remove static class as well
         body.classList.remove('no-scroll');
         burger.classList.remove('toggle');
-        nav.style.transition = ''; // Reset transition to default (from CSS)
-        nav.style.transform = ''; // Reset transform to default (from CSS)
         // Reseta a animação para que possa ser executada da próxima vez
         navLinks.forEach(link => {
             link.style.animation = '';
@@ -38,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- Lógica Principal do Menu ---
-    
+    let menuShouldClose = true; // Flag para controlar quando o menu deve fechar
     let isProcessingClick = false; // Flag para prevenir múltiplos processamentos
     let clickTimeout = null; // Para controlar timeouts
 
@@ -68,31 +65,54 @@ document.addEventListener('DOMContentLoaded', function() {
                 link.addEventListener('click', function(event) {
                     // Previne completamente qualquer fechamento do menu
                     event.stopPropagation();
+                    menuShouldClose = false;
 
                     // Armazena sinal para manter menu aberto na próxima página
                     if (nav.classList.contains('nav-active')) {
                         sessionStorage.setItem('openMobileMenu', 'true');
                     }
+
+                    // Mantém menuShouldClose = false por mais tempo
+                    setTimeout(() => {
+                        menuShouldClose = true;
+                    }, 500); // Aumentado para 500ms
                 });
             }
         });
 
         // 2.5. BLOQUEIO TOTAL de fechamento por cliques internos
-        
-
-        
-
-        
-
-        
-
-        // Fechamento automático por clique fora do menu ou do ícone do burger
-        document.addEventListener('click', function(event) {
-            // Se o menu estiver aberto E o clique não foi dentro do nav E o clique não foi no burger
-            if (nav.classList.contains('nav-active') && !nav.contains(event.target) && !burger.contains(event.target)) {
-                closeNav();
-            }
+        nav.addEventListener('mousedown', function(event) {
+            event.stopPropagation();
+            menuShouldClose = false;
         });
+
+        nav.addEventListener('mouseup', function(event) {
+            event.stopPropagation();
+            // Mantém menuShouldClose = false por mais tempo
+            setTimeout(() => {
+                menuShouldClose = true;
+            }, 200);
+        });
+
+        nav.addEventListener('touchstart', function(event) {
+            event.stopPropagation();
+            menuShouldClose = false;
+        }, { passive: true });
+
+        nav.addEventListener('touchend', function(event) {
+            event.stopPropagation();
+            setTimeout(() => {
+                menuShouldClose = true;
+            }, 200);
+        }, { passive: true });
+
+        // 3. REMOVIDO: Fechamento automático por clique fora
+        // O menu agora só fecha através do botão do menu
+        /*
+        document.addEventListener('click', function(event) {
+            // Código removido - menu só fecha pelo botão
+        });
+        */
 
         // 4. REMOVIDO: Suporte para dispositivos touch
         // Simplificando para focar apenas no problema principal
