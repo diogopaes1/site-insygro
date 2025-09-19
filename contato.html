@@ -34,7 +34,7 @@
     <main>
         <section class="page-title">
             <div class="container">
-                <h1>Fale Conosco</h1>
+                <h1>FALE CONOSCO</h1>
                 <p>Tem uma pergunta ou quer iniciar um projeto? Preencha o formulário abaixo.</p>
             </div>
         </section>
@@ -46,7 +46,8 @@
                     <!-- O Formspree usa _next para redirecionar após o envio. Apontei para uma futura página de "obrigado". -->
                     <input type="hidden" name="_next" value="https://insygro.com.br/obrigado.html"> 
                     
-                    <div class="form-group">
+                    <div class="form-fields-container"> <!-- Início da nova caixa -->
+                        <div class="form-group">
                         <label>Objetivo do Contato:</label>
                         <div class="radio-group">
                             <input type="radio" id="objetivo-duvida" name="objetivo" value="Dúvida" checked>
@@ -83,7 +84,7 @@
                     <div class="form-row-three">
                         <div class="form-group phone-input">
                             <label for="phone">Telefone</label>
-                            <input type="tel" id="phone" name="phone" placeholder="(87) 99999-9999" required>
+                            <input type="tel" id="phone" name="phone" placeholder="(99) 99999-9999" required>
                         </div>
                         <div class="form-group">
                             <label for="city">Cidade</label>
@@ -128,6 +129,7 @@
                         <label for="message">Mensagem</label>
                         <textarea id="message" name="message" rows="6" required></textarea>
                     </div>
+                </div> <!-- Fim da nova caixa -->
 
                     <!-- Checkboxes de Política de Privacidade -->
                     <div class="privacy-checkbox-group">
@@ -136,7 +138,7 @@
                             Concordo com a política de privacidade da empresa
                         </label>
                         <div class="privacy-terms">
-                            Concordo em receber comunicações e declaro ter lido as 
+                            Concordo em receber comunicações e declaro ter lido a 
                             <a href="politica-privacidade.html" target="_blank">[Política de Privacidade]</a>
                         </div>
                     </div>
