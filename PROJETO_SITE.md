@@ -15,7 +15,7 @@ O objetivo é criar um site profissional e moderno para a Insygro, que sirva com
 - **`servicos.html` (Serviços):** Página principal que funciona como um portal, apresentando os cinco serviços detalhados da empresa.
 - **`projetos.html` (Projetos/Portfólio):** Apresentará cases de sucesso de forma anônima, baseados nos relatórios, para demonstrar a expertise da empresa.
 - **`sobre.html` (Sobre Nós):** Conterá a história, missão, e o perfil técnico da equipe, reforçando a base científica da empresa.
-- **`contato.html` (Contato):** Página com o novo formulário de contato avançado.
+- **`contato.php` (Contato):** Página com o novo formulário de contato avançado.
 
 ### b. Subpáginas de Serviços (Acessadas via `servicos.html`)
 - **`servico-analise-dados.html`:** Detalhará os serviços de análise estatística e Big Data para diversas áreas.
@@ -24,7 +24,7 @@ O objetivo é criar um site profissional e moderno para a Insygro, que sirva com
 - **`servico-micropropagacao.html`:** Detalhes sobre a produção de mudas in vitro.
 - **`servico-pd-biologico.html`:** Detalhes sobre o serviço de Pesquisa e Desenvolvimento de bioinsumos.
 
-### c. `contato.html` (Funcionalidades Avançadas)
+### c. `contato.php` (Funcionalidades Avançadas)
 - **Formulário Condicional:**
     - Campo de seleção: "Dúvidas Gerais" ou "Solicitar Orçamento".
     - E-mails de destino diferentes: `duvidas@insygro.com.br` e `orcamento@insygro.com.br`.
@@ -58,7 +58,7 @@ O objetivo é criar um site profissional e moderno para a Insygro, que sirva com
 |-- servicos.html
 |-- projetos.html
 |-- sobre.html
-|-- contato.html
+|-- contato.php
 |-- servico-analise-dados.html
 |-- servico-metagenomica.html
 |-- servico-agronomia.html

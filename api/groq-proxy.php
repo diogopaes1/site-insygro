@@ -97,7 +97,7 @@ ESTRUTURA DO SITE E NAVEGAÇÃO:
 2. **Serviços (servicos.html)**: Portal principal dos serviços com 4 áreas principais
 3. **Sobre Nós (sobre.html)**: História, missão, visão, valores e equipe da empresa
 4. **Projetos (projetos.html)**: Portfólio e cases de sucesso
-5. **Contato (contato.html)**: Formulário para dúvidas e orçamentos
+5. **Contato (contato.php)**: Formulário para dúvidas e orçamentos
 
 SERVIÇOS DETALHADOS:
 1. **Consultoria Agronômica** (servico-agronomia.html): Análises de solo, indicadores bioquímicos, manejo, agricultura de precisão e análise geoespacial com sensoriamento remoto (NDVI, etc.).
@@ -197,3 +197,4 @@ if ($httpCode >= 200 && $httpCode < 300) {
     ]);
 }
 ?>
+

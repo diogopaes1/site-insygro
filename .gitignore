@@ -1,8 +1,6 @@
 # Arquivos sensíveis e temporários
 .env
 *.log
-.htaccess  # Se contiver chaves, mas cuidado para não ignorar configurações necessárias
-api/*.php  # Opcional: ignorar PHP se quiser, mas pode quebrar o site; remova se não for seguro
 
 # Outros
 .DS_Store

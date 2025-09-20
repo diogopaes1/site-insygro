@@ -20,7 +20,7 @@
                     <li><a href="servicos.html">Serviços</a></li>
                     <li><a href="projetos.html">Projetos</a></li>
                     <li><a href="sobre.html">Sobre</a></li>
-                    <li><a href="contato.html" class="active">Contato</a></li>
+                    <li><a href="contato.php" class="active">Contato</a></li>
                 </ul>
                 <div class="burger">
                     <div class="line1"></div>
@@ -41,7 +41,7 @@
 
         <section class="contact-form-section">
             <div class="container">
-                <form id="contact-form" action="https://formspree.io/f/myzdbryd" method="post">
+                <form id="contact-form" action="https://formspree.io/f/<?php echo getenv('FORMSPREE_KEY'); ?>" method="post">
                     
                     <!-- O Formspree usa _next para redirecionar após o envio. Apontei para uma futura página de "obrigado". -->
                     <input type="hidden" name="_next" value="https://insygro.com.br/obrigado.html"> 

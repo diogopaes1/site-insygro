@@ -11,7 +11,10 @@
 </IfModule>
 
 # Configurações de Segurança e Variáveis de Ambiente
-# Substitua 'SUA_CHAVE_REAL_AQUI' pela chave da API Groq
+# Configure as seguintes variáveis no painel do Hostinger (Configurações > Variáveis de Ambiente):
+# GROQ_API_KEY = sua_chave_groq_real
+# FORMSPREE_KEY = sua_chave_formspree_real
+# Ou use SetEnv aqui se preferir, mas remova as chaves do repositório Git
 
 # Restringe acesso ao groq-proxy.php
 <Files "api/groq-proxy.php">
