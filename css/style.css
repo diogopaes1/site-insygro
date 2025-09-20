@@ -388,22 +388,90 @@ nav a:hover, nav a.active {
 .about-us::before {
     content: '';
     position: absolute;
-    top: 0;
+    top:5%;
     left: 50%;
     transform: translateX(-50%);
     width: 80%;
-    height: 100%;
+    height:90%;
     background-image: url('../Image/Logo_Cinza.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    opacity: 0.05; /* Opacidade bem baixa para efeito de marca d'água */
+    opacity: 0.15; /* Opacidade bem baixa para efeito de marca d'água */
     z-index: -1;
 }
 
 .about-us p, 
 .about-us ul li {
     text-align: justify;
+    font-size: 0.9rem;
+}
+
+.about-us h1, .about-us h2 {
+    text-align: center;
+}
+
+.contact-title {
+    position: relative;
+    background-color: transparent;
+}
+
+.contact-title::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 90%;
+    background-image: url('../Image/Logo_Cinza.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.15;
+    z-index: -1;
+}
+
+.service-title {
+    position: relative;
+    background-color: transparent;
+}
+
+.service-title::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 90%;
+    background-image: url('../Image/Logo_Cinza.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.15;
+    z-index: -1;
+}
+
+.project-title {
+    position: relative;
+    background-color: transparent;
+}
+
+.project-title::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 90%;
+    background-image: url('../Image/Logo_Cinza.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.15;
+    z-index: -1;
 }
 
 /* --- Divisor de Seção --- */
@@ -550,6 +618,7 @@ footer .container::after {
 /* --- Formulário de Contato --- */
 .contact-form-section {
     padding: 2rem 0; /* Reduzido de 4rem para 2rem */
+    background-color: transparent;
 }
 .contact-form-section form {
     display: flex;
@@ -560,7 +629,7 @@ footer .container::after {
 }
 
 .form-fields-container {
-    background-color: #f9f9f9;
+    background-color: transparent;
     padding: 2rem; /* Reduzido de 2.5rem para 2rem */
     border-radius: 8px;
     border-left: 5px solid var(--primary-green);
@@ -737,8 +806,12 @@ section.visible {
         justify-content: center; /* Centraliza o item principal (logo) */
         position: relative; /* Permite posicionar o menu em relação ao cabeçalho */
     }
+/* Deslocar Logo*/
+    .logo {
+    margin-left: -50px; /* Ajuste o valor conforme necessário */
+}
 
-    /* Posiciona o elemento de navegação (que contém o ícone do menu) */
+/* Posiciona o elemento de navegação (que contém o ícone do menu) */
     nav {
         position: absolute;
         right: 5%; /* Alinha o ícone do menu à direita, dentro do container */
