@@ -1,7 +1,7 @@
 <?php
-// --- Configuração de Headers e CORS ---
+// --- Configuração de Headers e CORS (Restrito ao Domínio do Site) ---
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: https://insygro.com.br'); // Substitua pelo seu domínio real
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type, Accept');
 
@@ -11,8 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// --- Chave da API (Segura no servidor) ---
-$apiKey = 'REMOVIDO_POR_SEGURANCA';
+// --- Chave da API (Segura via Variável de Ambiente) ---
+$apiKey = getenv('GROQ_API_KEY') ?: 'CHAVE_NAO_CONFIGURADA';
 
 // --- Log para debug ---
 error_log("Recebendo requisição para chatbot...");

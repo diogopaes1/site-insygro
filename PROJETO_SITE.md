@@ -143,8 +143,7 @@ Seguir este checklist garantirá que as atualizações futuras sejam tranquilas 
 #### 2.3 Integração com IA
 - **Provedor:** Groq API (https://console.groq.com)
 - **Modelo:** `llama-3.1-8b-instant` (atualizado - modelo anterior `llama3-8b-8192` foi descontinuado)
-- **Chave API:** `REMOVIDO_POR_SEGURANCA` (válida)
-- **Chave API:** `[CONFIGURADA_DIRETAMENTE_NO_ARQUIVO_PHP]` (Não armazenar neste documento por segurança)
+- **Chave API:** `[CONFIGURADA VIA VARIÁVEL DE AMBIENTE NO SERVIDOR]` (Não armazenar neste documento por segurança)
 
 ### 3. Estrutura de Arquivos Atualizada
 ```

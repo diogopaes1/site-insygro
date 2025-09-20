@@ -9,3 +9,13 @@
 <IfModule mod_autoindex.c>
     Options -Indexes
 </IfModule>
+
+# Configurações de Segurança e Variáveis de Ambiente
+# Substitua 'SUA_CHAVE_REAL_AQUI' pela chave da API Groq
+SetEnv GROQ_API_KEY "SUA_CHAVE_REAL_AQUI"
+
+# Restringe acesso ao groq-proxy.php
+<Files "api/groq-proxy.php">
+    Order Deny,Allow
+    Allow from all  # Ou restrinja a IPs/domínios específicos
+</Files>
