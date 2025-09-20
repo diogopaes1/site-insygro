@@ -1,7 +1,7 @@
 <?php
 // --- Configuração de Headers e CORS (Restrito ao Domínio do Site) ---
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: https://insygro.com.br'); // Substitua pelo seu domínio real
+header('Access-Control-Allow-Origin: https://insygro.com.br'); // Domínio real configurado
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type, Accept');
 
